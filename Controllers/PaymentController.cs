@@ -25,7 +25,7 @@ namespace payment_service.Controllers
 
 		}
 
-		[HttpGet("wallet/balance/{}")]
+		[HttpGet("wallet/balance/{userIdString}")]
 		public async Task<IActionResult> GetBalance()
 		{
 
