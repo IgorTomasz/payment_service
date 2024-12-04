@@ -1,4 +1,9 @@
 
+using Microsoft.EntityFrameworkCore;
+using payment_service.context;
+using payment_service.repositories;
+using payment_service.services;
+
 namespace payment_service
 {
     public class Program
@@ -10,7 +15,9 @@ namespace payment_service
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddScoped<>
+            builder.Services.AddDbContext<PaymentDatabaseContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -24,7 +31,17 @@ namespace payment_service
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+			/**
+             * Authorization with gateway api by ip filtering
+             */
+			//app.UseMiddleware<IpFilteringMiddleware>();
+
+			/**
+             * Authorization with gateway api by secret key
+             */
+			//app.UseMiddleware<GatewayAuthenticationMiddleware>();
+
+			app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

@@ -17,6 +17,8 @@ namespace payment_service.models
 		public TransactionType TransactionType { get; set; }
 		[Required]
 		public TransactionStatus TransactionStatus { get; set; }
+		[Required]
+		public decimal BalanceAfterTransaction { get; set; }
 		public PaymentMethod? PaymentMethod { get; set; }
 		public Dictionary<string, object> MetaData { get; set; }
 		[ForeignKey(nameof(AccountId))]
@@ -30,11 +32,11 @@ namespace payment_service.models
 
 	public enum TransactionStatus
 	{
-		Pending, Completed, Failed, Processing, Canceled
+		Completed, Failed, Processing
 	}
 
 	public enum PaymentMethod
 	{
-		Card, Paypal, Blik
+		Card, Paypal, Blik, System
 	}
 }
