@@ -30,7 +30,7 @@ namespace payment_service.Controllers
 		}
 
 
-		[HttpGet("wallet/balance")]
+		[HttpGet("wallet/balance/{userId}")]
 		public async Task<IActionResult> GetBalance(Guid userId)
 		{
 			decimal balance = await _paymentService.GetBalance(userId);
@@ -50,10 +50,14 @@ namespace payment_service.Controllers
 			});
 		}
 
-		[HttpGet("wallet/transactions")]
+		[HttpGet("wallet/transactions/{userId}")]
 		public async Task<IActionResult> GetUserTransactions(Guid userId)
 		{
-			return Ok(await _paymentService.GetUserTransactions(userId));
+			return Ok(new HttpResponseModel
+			{
+				Success = true,
+				Message = await _paymentService.GetUserTransactions(userId)
+			});
 		}
 
 		[HttpPost("account/create")]
