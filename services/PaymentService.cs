@@ -10,10 +10,10 @@ namespace payment_service.services
 		public Task<object> CreateNewTransaction(PaymentRequest depositRequest, Guid accountId);
 		public Task<decimal> GetBalance(Guid userId);
 		public Task<Guid> IsAccountExists(Guid userId);
-		public Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amount, Transaction transaction);
+		public Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amount, TransactionResponse transaction);
 		public Task<List<AllAccountsResponse>> GetAllAccounts();
 		public Task<List<AllTransactionsResponse>> GetAllTransactions();
-		public Task<bool> AfterTransactionComplete(Transaction transaction);
+		public Task<bool> AfterTransactionComplete(TransactionResponse transaction);
 		public Task<bool> CheckAvailableFunds(Guid accountId, decimal bet);
 		public Task<List<Transaction>> GetUserTransactions(Guid userId);
 	}
@@ -47,7 +47,7 @@ namespace payment_service.services
 			return await _paymentRepository.CreateNewTransaction(depositRequest, accountId);
 		}
 
-		public async Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amount, Transaction transaction)
+		public async Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amount, TransactionResponse transaction)
 		{
 			return await _paymentRepository.UpdateAccountAfterTransaction(accountId, amount, transaction);
 		}
@@ -62,7 +62,7 @@ namespace payment_service.services
 			return await _paymentRepository.GetTransactions();
 		}
 
-		public async Task<bool> AfterTransactionComplete(Transaction transaction)
+		public async Task<bool> AfterTransactionComplete(TransactionResponse transaction)
 		{
 			return await _paymentRepository.AfterTransactionComplete(transaction);
 		}

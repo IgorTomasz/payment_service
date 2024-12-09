@@ -37,10 +37,17 @@ namespace payment_service.Controllers
 
 			if (balance == -1)
 			{
-				return Conflict("There is no account for that user guid");
+				return Conflict(new HttpResponseModel {
+					Success = false, 
+					Error = "There is no account for that user guid"
+				});
 			}
 
-			return Ok(balance);
+			return Ok(new HttpResponseModel
+			{
+				Success = true,
+				Message = balance
+			});
 		}
 
 		[HttpGet("wallet/transactions")]
@@ -50,18 +57,25 @@ namespace payment_service.Controllers
 		}
 
 		[HttpPost("account/create")]
-		public async Task<IActionResult> CreateAccount(Guid userId)
+		public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
 		{
 
 
-			bool res = await _paymentService.CreateNewAccount(userId);
+			bool res = await _paymentService.CreateNewAccount(request.UserId);
 
 			if (res)
 			{
-				return Created();
+				return Created("", new HttpResponseModel
+				{
+					Success = true,
+				});
 			}
 
-			return Conflict("Something went wrong while creating an account");
+			return Conflict(new HttpResponseModel
+			{
+				Success = false,
+				Error = "Something went wrong while creating an account"
+			});
 		}
 
 		[HttpPost("payments/handle-payment")]
@@ -71,7 +85,10 @@ namespace payment_service.Controllers
 
 			if (isAccountExists == Guid.Empty)
 			{
-				return BadRequest("There is no account for that user");
+				return BadRequest(new HttpResponseModel {
+					Success = false, 
+					Error = "There is no account for that user" 
+				});
 			}
 
 			var transactionTypeString = paymentRequest.MetaData["TransactionType"]?.ToString();
@@ -83,7 +100,11 @@ namespace payment_service.Controllers
 
 				if (!availableFunds)
 				{
-					return BadRequest("No sufficient funds on the account");
+					return BadRequest(new HttpResponseModel
+					{
+						Success = false,
+						Error = "No sufficient funds on the account"
+					});
 				}
 			}
 
@@ -92,24 +113,40 @@ namespace payment_service.Controllers
 
 			if (!transaction.created)
 			{
-				return Conflict("Something went wrong while creating transaction");
+				return Conflict(new HttpResponseModel
+				{
+					Success = false,
+					Error = "Something went wrong while creating transaction"
+				});
 			}
 
 			bool updated = await _paymentService.UpdateAccountAfterTransaction(isAccountExists, transaction.amount, transaction.transaction);
 			
 			if (!updated)
 			{
-				return Conflict("Something went wrong while updating account balance");
+				return Conflict(new HttpResponseModel
+				{
+					Success = false,
+					Error = "Something went wrong while updating account balance"
+				});
 			}
 
 			bool updateTransaction = await _paymentService.AfterTransactionComplete(transaction.transaction);
 
 			if (!updateTransaction)
 			{
-				return Conflict("Failed to complete the transaction");
+				return Conflict(new HttpResponseModel
+				{
+					Success = false,
+					Error = "Failed to complete the transaction"
+				});
 			}
 
-			return Created();
+			return Created("", new HttpResponseModel
+			{
+				Success = true,
+				Message = transaction.transaction
+			});
 		}
 
 		

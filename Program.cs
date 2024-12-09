@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using payment_service.context;
+using payment_service.middleware;
 using payment_service.repositories;
 using payment_service.services;
 

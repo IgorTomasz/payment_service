@@ -11,10 +11,10 @@ namespace payment_service.repositories
 		public Task<object> CreateNewTransaction(PaymentRequest depositRequest, Guid accountId);
 		public Task<decimal> GetUserBalance(Guid userId);
 		public Task<Guid> IsAccountExists(Guid userId);
-		public Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amount, Transaction transaction);
+		public Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amountNormal, TransactionResponse transaction);
 		public Task<List<AllAccountsResponse>> GetAccounts();
 		public Task<List<AllTransactionsResponse>> GetTransactions();
-		public Task<bool> AfterTransactionComplete(Transaction transaction);
+		public Task<bool> AfterTransactionComplete(TransactionResponse transaction);
 		public Task<bool> SufficientFundsAvailable(Guid accountId, decimal bet);
 		public Task<List<Transaction>> GetUserTransactions(Guid userId);
 	}
@@ -106,11 +106,22 @@ namespace payment_service.repositories
 			{
 				created = res!=null,
 				amount = depositRequest.Amount,
-				transaction = transaction
+				transaction = new TransactionResponse
+				{
+					TransactionId = transactionId,
+					Amount = transaction.Amount,
+					Timestamp = transaction.Timestamp,
+					TransactionType = Enum.GetName<TransactionType>(transaction.TransactionType),
+					TransactionStatus = Enum.GetName<TransactionStatus>(transaction.TransactionStatus),
+					BalanceAfterTransaction = transaction.BalanceAfterTransaction,
+					PaymentMethod = Enum.GetName(typeof(PaymentMethod), transaction.PaymentMethod),
+					MetaData = transaction.MetaData
+
+				}
 			};
 		}
 
-		public async Task<bool> AfterTransactionComplete(Transaction transaction)
+		public async Task<bool> AfterTransactionComplete(TransactionResponse transaction)
 		{
 			Transaction trans = await _context.Transactions.FindAsync(transaction.TransactionId);
 
@@ -121,17 +132,17 @@ namespace payment_service.repositories
 			return res > 0;
 		}
 
-		public async Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amountNormal, Transaction transaction)
+		public async Task<bool> UpdateAccountAfterTransaction(Guid accountId, decimal amountNormal, TransactionResponse transaction)
 		{
 			Account account = await _context.Accounts.FindAsync(accountId);
 
 			decimal amount = amountNormal;
 			switch (transaction.TransactionType)
 			{
-				case TransactionType.Deposit: amount = amount < 0 ? amount * -1.0m : amount; break;
-				case TransactionType.Withdraw: amount = amount > 0 ? amount * -1.0m : amount; break;
-				case TransactionType.GameBet: amount = amount > 0 ? amount * -1.0m : amount; break;
-				case TransactionType.GameWin: amount = amount < 0 ? amount * -1.0m : amount; break;
+				case "Deposit": amount = amount < 0 ? amount * -1.0m : amount; break;
+				case "Withdraw": amount = amount > 0 ? amount * -1.0m : amount; break;
+				case "GameBet": amount = amount > 0 ? amount * -1.0m : amount; break;
+				case "GameWin": amount = amount < 0 ? amount * -1.0m : amount; break;
 			};
 
 			account.Balance += amount;
