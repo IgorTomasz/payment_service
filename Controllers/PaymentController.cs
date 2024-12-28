@@ -37,7 +37,7 @@ namespace payment_service.Controllers
 
 			if (balance == -1)
 			{
-				return Conflict(new HttpResponseModel {
+				return Ok(new HttpResponseModel {
 					Success = false, 
 					Error = "There is no account for that user guid"
 				});
@@ -69,7 +69,7 @@ namespace payment_service.Controllers
 
 			if (res)
 			{
-				return Created("", new HttpResponseModel
+				return Ok("", new HttpResponseModel
 				{
 					Success = true,
 				});
@@ -89,7 +89,7 @@ namespace payment_service.Controllers
 
 			if (isAccountExists == Guid.Empty)
 			{
-				return BadRequest(new HttpResponseModel {
+				return Ok(new HttpResponseModel {
 					Success = false, 
 					Error = "There is no account for that user" 
 				});
@@ -104,7 +104,7 @@ namespace payment_service.Controllers
 
 				if (!availableFunds)
 				{
-					return BadRequest(new HttpResponseModel
+					return Ok(new HttpResponseModel
 					{
 						Success = false,
 						Error = "No sufficient funds on the account"
@@ -117,7 +117,7 @@ namespace payment_service.Controllers
 
 			if (!transaction.created)
 			{
-				return Conflict(new HttpResponseModel
+				return Ok(new HttpResponseModel
 				{
 					Success = false,
 					Error = "Something went wrong while creating transaction"
@@ -128,7 +128,7 @@ namespace payment_service.Controllers
 			
 			if (!updated)
 			{
-				return Conflict(new HttpResponseModel
+				return Ok(new HttpResponseModel
 				{
 					Success = false,
 					Error = "Something went wrong while updating account balance"
@@ -139,7 +139,7 @@ namespace payment_service.Controllers
 
 			if (!updateTransaction)
 			{
-				return Conflict(new HttpResponseModel
+				return Ok(new HttpResponseModel
 				{
 					Success = false,
 					Error = "Failed to complete the transaction"
