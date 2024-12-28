@@ -75,7 +75,7 @@ namespace payment_service.Controllers
 				});
 			}
 
-			return Conflict(new HttpResponseModel
+			return Ok(new HttpResponseModel
 			{
 				Success = false,
 				Error = "Something went wrong while creating an account"
