@@ -45,7 +45,7 @@ namespace payment_service.repositories
 				Status = 0,
 				CreatedAt = DateTime.UtcNow.AddHours(1),
 				UpdatedAt = DateTime.UtcNow.AddHours(1),
-				Currency = "PLN"
+				Currency = "USD"
 			};
 
 			var res = await _context.Accounts.AddAsync(account);

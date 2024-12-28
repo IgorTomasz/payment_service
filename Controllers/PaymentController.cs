@@ -69,7 +69,7 @@ namespace payment_service.Controllers
 
 			if (res)
 			{
-				return Ok("", new HttpResponseModel
+				return Created("", new HttpResponseModel
 				{
 					Success = true,
 				});
