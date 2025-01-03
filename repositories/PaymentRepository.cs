@@ -214,7 +214,7 @@ namespace payment_service.repositories
 
 		public async Task<List<Transaction>> GetUserTransactions(Guid userId)
 		{
-			return await _context.Transactions.Where(e=> e.Account.UserId == userId).OrderBy(e=>e.Timestamp).ToListAsync();
+			return await _context.Transactions.Where(e=> e.Account.UserId == userId && e.PaymentMethod != PaymentMethod.System).OrderBy(e=>e.Timestamp).ToListAsync();
 		}
 
 	}
