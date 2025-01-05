@@ -35,12 +35,12 @@ namespace payment_service
 			/**
              * Authorization with gateway api by ip filtering
              */
-			//app.UseMiddleware<IpFilteringMiddleware>();
+			app.UseMiddleware<IpFilteringMiddleware>();
 
 			/**
              * Authorization with gateway api by secret key
              */
-			//app.UseMiddleware<GatewayAuthenticationMiddleware>();
+			app.UseMiddleware<GatewayAuthenticationMiddleware>();
 
 			app.UseHttpsRedirection();
 

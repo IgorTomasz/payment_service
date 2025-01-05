@@ -1,4 +1,4 @@
-﻿namespace payment_service.models
+﻿namespace payment_service.models.DTOs
 {
 	public class HttpResponseModel
 	{
