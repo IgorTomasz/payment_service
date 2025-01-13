@@ -124,6 +124,7 @@ Uwaga: Metoda płatności "System" jest zarezerwowana dla transakcji wewnętrzny
 ### Przykłady użycia
 
 #### Wpłata przez PayPal:
+```
 ```json
 {
     "userId": "guid",
