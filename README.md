@@ -98,17 +98,78 @@ Request body dla obsługi płatności:
     "amount": "decimal",
     "metaData": {
         "transactionType": "string",
-        // Dodatkowe metadane specyficzne dla transakcji
+        "paymentMethod": "string"
     }
 }
 ```
 
-## 💳 Typy Transakcji
-System obsługuje różne typy transakcji:
+### Limity transakcji
+- Minimalna kwota dla wszystkich typów transakcji: 1.00
+- Brak górnego limitu kwoty transakcji
+
+### Statusy transakcji
+- **Completed** - transakcja zakończona sukcesem
+- **Failed** - transakcja zakończona niepowodzeniem
+- **Processing** - transakcja w trakcie przetwarzania
+
+### Wymagane pola MetaData
+- **TransactionType** - typ transakcji (Deposit, Withdraw, GameBet, GameWin)
+- **PaymentMethod** - metoda płatności (Card, Paypal, Blik, System)
+
+Uwaga: Metoda płatności "System" jest zarezerwowana dla transakcji wewnętrznych (np. GameBet, GameWin) i nie powinna być używana dla wpłat/wypłat zewnętrznych.
+```
+
+## 💳 Metody płatności i typy transakcji
+
+### Dostępne metody płatności
+- **Card** - płatność kartą kredytową/debetową
+- **PayPal** - płatność przez system PayPal
+- **Blik** - płatność za pomocą systemu Blik
+- **System** - transakcje wewnętrzne systemu (np. wygrane z gier)
+
+### Typy Transakcji
 - **Deposit** - wpłata środków
 - **Withdraw** - wypłata środków
 - **GameBet** - zakład w grze
 - **GameWin** - wygrana z gry
+
+### Przykłady użycia
+
+#### Wpłata przez PayPal:
+```json
+{
+    "userId": "guid",
+    "amount": 100.00,
+    "metaData": {
+        "transactionType": "Deposit",
+        "paymentMethod": "Paypal"
+    }
+}
+```
+
+#### Wypłata na kartę:
+```json
+{
+    "userId": "guid",
+    "amount": 500.00,
+    "metaData": {
+        "transactionType": "Withdraw",
+        "paymentMethod": "Card"
+    }
+}
+```
+
+#### Zakład w grze (transakcja systemowa):
+```json
+{
+    "userId": "guid",
+    "amount": 50.00,
+    "metaData": {
+        "transactionType": "GameBet",
+        "paymentMethod": "System"
+    }
+}
+```
 
 ## 📤 Struktura odpowiedzi API
 Każdy endpoint zwraca ujednoliconą strukturę odpowiedzi w formacie:
@@ -123,6 +184,23 @@ public class HttpResponseModel
 ```
 
 ### Przykładowe odpowiedzi
+
+#### Sukces - utworzenie transakcji wpłaty:
+```json
+{
+    "success": true,
+    "error": null,
+    "message": {
+        "transactionId": "guid",
+        "status": "Processing",
+        "amount": 100.00,
+        "metaData": {
+            "transactionType": "Deposit",
+            "paymentMethod": "CreditCard"
+        }
+    }
+}
+```
 
 #### Sukces - pobranie salda:
 ```json
