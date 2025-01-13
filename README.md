@@ -121,18 +121,6 @@ Uwaga: Metoda płatności "System" jest zarezerwowana dla transakcji wewnętrzny
 
 ## 💳 Metody płatności i typy transakcji
 
-### Dostępne metody płatności
-- **Card** - płatność kartą kredytową/debetową
-- **PayPal** - płatność przez system PayPal
-- **Blik** - płatność za pomocą systemu Blik
-- **System** - transakcje wewnętrzne systemu (np. wygrane z gier)
-
-### Typy Transakcji
-- **Deposit** - wpłata środków
-- **Withdraw** - wypłata środków
-- **GameBet** - zakład w grze
-- **GameWin** - wygrana z gry
-
 ### Przykłady użycia
 
 #### Wpłata przez PayPal:
