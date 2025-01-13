@@ -180,12 +180,16 @@ public class HttpResponseModel
     "success": true,
     "error": null,
     "message": {
-        "transactionId": "guid",
-        "status": "Processing",
+        "transactionId": "123e4567-e89b-12d3-a456-426614174000",
         "amount": 100.00,
+        "timestamp": "2025-01-13T14:30:00.0000000Z",
+        "transactionType": "Deposit",
+        "transactionStatus": "Processing",
+        "balanceAfterTransaction": 1500.00,
+        "paymentMethod": "Card",
         "metaData": {
             "transactionType": "Deposit",
-            "paymentMethod": "CreditCard"
+            "paymentMethod": "Card"
         }
     }
 }
@@ -206,14 +210,6 @@ public class HttpResponseModel
     "success": false,
     "error": "No sufficient funds on the account",
     "message": null
-}
-```
-
-#### Sukces - utworzenie transakcji:
-```json
-{
-    "success": true,
-    "message": "guid-transakcji"
 }
 ```
 
